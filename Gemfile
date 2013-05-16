@@ -16,4 +16,6 @@ end
 gem 'spree', github: 'spree/spree', branch: 'master'
 gem 'globalize3', '~> 0.3.0'
 
+gem 'pry'
+
 gemspec
