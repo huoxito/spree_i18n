@@ -32,19 +32,24 @@ module Spree
     module_function :create_hash
 
     # Writes to file from translation data hash structure
-    def write_file(filename,basename,comments,words,comment_values=true, fallback_values={})
+    def write_file(filename, basename, comments, words)
       File.open(filename, "w") do |log|
-        log.puts(basename+": \n")
+        log.puts(basename + ":\n")
+
         words.sort.each do |k,v|
           keys = k.split(':')
-          (keys.size-1).times { keys[keys.size-1] = '  ' + keys[keys.size-1] }   #Add indentation for children keys
+          (keys.size - 1).times { keys[keys.size - 1] = '  ' + keys[keys.size-1] } # Add indentation for children keys
+
           value = v.strip
-          value = ("#" + value) if comment_values and not value.blank?
-          log.puts "#{keys[keys.size-1]}: #{value}\n"
+
+          if value.blank?
+            log.puts "#{keys[keys.size-1]}:\n"
+          else
+            log.puts "#{keys[keys.size-1]}: #{value}\n"
+          end
         end
       end
     end
     module_function :write_file
-
   end
 end

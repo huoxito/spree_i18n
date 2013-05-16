@@ -18,7 +18,7 @@ module SpreeI18n
         # Remove if not defined in en locale
         entries.delete_if { |k,v| !default_entries[k] } 
 
-        Spree::I18nUtils.write_file(filename, basename, comments, entries, false)
+        Spree::I18nUtils.write_file(filename, basename, comments, entries)
       end
     end
 
