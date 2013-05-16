@@ -32,21 +32,27 @@ module Spree
     module_function :create_hash
 
     # Writes to file from translation data hash structure
-    def write_file(filename, basename, comments, words)
+    def write_file(filename, basename, comments, entries)
       File.open(filename, "w") do |log|
         log.puts(basename + ":\n")
 
-        words.sort.each do |k,v|
-          keys = k.split(':')
-          (keys.size - 1).times { keys[keys.size - 1] = '  ' + keys[keys.size-1] } # Add indentation for children keys
 
+        entries.each do |k, v|
+
+          keys = k.split(':')
+          n = keys.size - 1
           value = v.strip
 
-          if value.blank?
-            log.puts "#{keys[keys.size-1]}:\n"
+          # Add indentation for children keys
+          n.times { keys[n] = '  ' + keys[n] } 
+
+          string = if value.blank?
+            "#{keys[n]}:\n"
           else
-            log.puts "#{keys[keys.size-1]}: #{value}\n"
+            "#{keys[n]}: #{v.strip}\n"
           end
+
+          log.puts string
         end
       end
     end

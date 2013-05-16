@@ -9,11 +9,33 @@ module SpreeI18n
     def run
       files.each do |filename|
 
+        sorted_keys = []
+
         basename = File.basename(filename, '.yml')
         comments, entries = Spree::I18nUtils.read_file(filename, basename)
 
         # Initializing hash variable as en fallback if it does not exist
-        default_entries.each { |k,v| entries[k] ||= "#{default_entries[k]}" }
+        default_entries.each do |k, v|
+          entries[k] ||= "#{default_entries[k]}"
+
+          sorted_keys = entries.keys.sort_by do |k|
+            keys = k.split(':')
+            n = keys.size - 1
+            if entries[k].blank?
+              k
+              # "#{keys.join(":")}/"
+            else
+              keys.first(n).join(":")
+            end
+          end
+        end
+        
+        hash = Hash.new
+        sorted_keys.each do |k|
+          hash[k] = entries[k]
+        end
+
+        binding.pry
 
         # Remove if not defined in en locale
         entries.delete_if { |k,v| !default_entries[k] } 
